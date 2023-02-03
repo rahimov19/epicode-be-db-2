@@ -6,16 +6,17 @@ import UsersModel from "../users/model.js";
 
 const reviewRouter = express.Router();
 
-reviewRouter.post("/", async (req, res, next) => {
+reviewRouter.post("/:productId/review", async (req, res, next) => {
   try {
-    const { id } = await ReviewsModel.create(req.body);
+    const reviewBody = { ...req.body, productId: req.params.productId };
+    const { id } = await ReviewsModel.create(reviewBody);
     res.status(201).send({ id });
   } catch (error) {
     next(error);
   }
 });
 
-reviewRouter.get("/", async (req, res, next) => {
+reviewRouter.get("/reviews", async (req, res, next) => {
   try {
     const reviews = await ReviewsModel.findAll({
       include: [{ model: UsersModel, attributes: ["name", "surname"] }],
@@ -26,7 +27,7 @@ reviewRouter.get("/", async (req, res, next) => {
   }
 });
 
-reviewRouter.get("/:reviewId", async (req, res, next) => {
+reviewRouter.get("/:reviewId/review", async (req, res, next) => {
   try {
     const review = await ReviewsModel.findByPk(req.params.reviewId, {
       attributes: { exclude: ["createdAt", "updatedAt"] },
@@ -46,7 +47,7 @@ reviewRouter.get("/:reviewId", async (req, res, next) => {
   }
 });
 
-reviewRouter.put("/:reviewId", async (req, res, next) => {
+reviewRouter.put("/:reviewId/review", async (req, res, next) => {
   try {
     const [numberOfUpdatedRows, updatedRecords] = await ReviewsModel.update(
       req.body,
@@ -68,7 +69,7 @@ reviewRouter.put("/:reviewId", async (req, res, next) => {
   }
 });
 
-reviewRouter.delete("/:reviewId", async (req, res, next) => {
+reviewRouter.delete("/:reviewId/review", async (req, res, next) => {
   try {
     const numberOfDeletedRows = await ReviewsModel.destroy({
       where: { id: req.params.reviewId },

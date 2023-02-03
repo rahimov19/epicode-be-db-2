@@ -1,6 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../../db.js";
-const ReviewsModel = sequelize.define("review", {
+const ReviewsModel = sequelize.define("reviews", {
   id: {
     type: DataTypes.UUID,
     primaryKey: true,
